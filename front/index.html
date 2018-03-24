@@ -113,6 +113,9 @@
                     }
                 });
 
+                map.transit = new google.maps.TransitLayer();
+                map.transit.setMap(map);
+
                 fetch(apiBase + 'api/stations')
                     .then(function (resp) {
                         resp.json().then(function (data) {
