@@ -52,8 +52,11 @@ class Station:
             ) - local_dep.utcoffset()
 
             if departure['MonitoredVehicleJourney']['VehicleRef'] not in reisapi.trains:
+                reisapi.trainLock.acquire()
                 reisapi.trains[departure['MonitoredVehicleJourney']['VehicleRef']] =\
                     Train(departure['MonitoredVehicleJourney']['VehicleRef'])
+                reisapi.trainLock.release()
+
                 reisapi.trains[departure['MonitoredVehicleJourney']['VehicleRef']].set_line(
                     departure['MonitoredVehicleJourney']['LineRef'],
                     departure['MonitoredVehicleJourney']['DestinationName']

@@ -1,13 +1,14 @@
 from datetime import datetime, timedelta
 from gevent import Greenlet, sleep
 import requests
-from threading import Thread
+from threading import Thread, RLock
 
 from lib.Config import Config
 from reisapi.Station import Station
 
 stations = {}
 trains = {}
+trainLock = RLock()
 
 
 def run():
@@ -40,11 +41,16 @@ def run():
                 break
 
         # Update trains
+        deletion_queue = []
+        trainLock.acquire()
         for train in trains.values():
             if train.lastUpdate < (datetime.utcnow() - timedelta(minutes=5)):
-                trains[train.train] = None
+                deletion_queue.append(train.train)
             else:
                 train.update_position()
+        for train in deletion_queue:
+            del trains[train]
+        trainLock.release()
 
         # Delay next loop.
         sleep(float(Config['REISAPI']['sleepTime']))

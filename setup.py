@@ -8,6 +8,7 @@ setup(
         'gevent==1.3a2',
         'flask==0.12.2',
         'requests==2.18.4',
-        'python-dateutil==2.7.0'
+        'python-dateutil==2.7.0',
+        'flask-cors==3.0.3'
     ]
 )

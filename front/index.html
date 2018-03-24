@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script>
+            const apiBase = '/'
+        </script>
+        <style>
+            html, body {
+                margin: 0;
+                height: 100%;
+                width: 100%;
+
+                font-family: Arial, Serif;
+            }
+
+            .map-frame {
+                height: 100%;
+                width: 100%;
+            }
+
+            .error-frame {
+                background-color: crimson;
+                color: white;
+
+                text-align: center;
+                line-height: 250%;
+
+                width: 100%;
+                position: absolute;
+                top: 0;
+
+                z-index: 1000;
+            }
+
+            .line-no {
+                background-color: orangered;
+                color: white;
+                padding: 0 5px;
+            }
+
+            .train-info p {
+                margin-top: 2px;
+                margin-bottom: 0px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="error" class="error-frame"></div>
+        <div id="map" class="map-frame"></div>
+        <script>
+            var map;
+            var trains = [];
+            const pulse = function () {
+                fetch(apiBase + 'api/trains')
+                    .then(function (resp) {
+                        resp.json()
+                            .then(function (data) {
+                                data.response.forEach(function (train) {
+                                    if (trains[train.id]) {
+                                        trains[train.id].setPosition({
+                                            lat: train.lat,
+                                            lng: train.lon
+                                        });
+
+                                        trains[train.id].infoWin.setContent('<div class="train-info">' +
+                                                '<strong><span class="line-no">' + train.line + '</span> ' + train.destination + '</strong>' +
+                                                '<p><strong>Tog:</strong> ' + train.id + '</p>' +
+                                                '<p><strong>Neste stasjon:</strong> ' + train.nextStop.name + '</p>' +
+                                                '<p><strong>Sist oppdatert: </strong> ' + new Date(train.lastUpdate).toLocaleString() + ' UTC</p>' +
+                                                '</div>');
+                                    } else {
+                                        var marker = new google.maps.Marker({
+                                            position: {
+                                                lat: train.lat,
+                                                lng: train.lon
+                                            },
+                                            map: map,
+                                            icon: '/train.png'
+                                        });
+
+                                        marker.infoWin = new google.maps.InfoWindow({
+                                            content: '<div class="train-info">' +
+                                                '<strong><span class="line-no">' + train.line + '</span> ' + train.destination + '</strong>' +
+                                                '<p><strong>Tog ID:</strong> ' + train.id + '</p>' +
+                                                '<p><strong>Neste stasjon:</strong> ' + train.nextStop.name + '</p>' +
+                                                '<p><strong>Sist oppdatert: </strong> ' + new Date(train.lastUpdate).toLocaleString() + ' UTC</p>' +
+                                                '</div>'
+                                        });
+
+                                        marker.addListener('click', function () {
+                                            marker.infoWin.open(map, marker);
+                                        });
+
+                                        trains[train.id] = marker;
+                                    }
+                                });
+                            })
+                            .then(function () {
+                                setTimeout(pulse, 1000);
+                            });
+                    })
+                    .catch(function (err) {
+                        document.getElementById('error').innerText = 'ERROR: Failed to contact the api.';
+                    });
+            };
+
+            function initMap() {
+                map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 12,
+                    center: {
+                        lat: 59.91185660942119,
+                        lng: 10.751199872566648
+                    }
+                });
+
+                fetch(apiBase + 'api/stations')
+                    .then(function (resp) {
+                        resp.json().then(function (data) {
+                            data.response.forEach(function (station) {
+                                var marker = new google.maps.Marker({
+                                    position: {
+                                        lat: station.lat,
+                                        lng: station.lon
+                                    },
+                                    map: map,
+                                    icon: '/station.png'
+                                });
+
+                                var info = new google.maps.InfoWindow({
+                                    content: '<strong>' + station.name + '</strong>'
+                                });
+
+                                marker.addListener('click', function () {
+                                    info.open(map, marker);
+                                });
+                            });
+                        });
+                        //setTimeout(pulse, 1000);
+                    })
+                    .catch(function (err) {
+                        document.getElementById('error').innerText = 'ERROR: Failed to contact the api.';
+                    });
+
+                setTimeout(pulse, 1000);
+            }
+        </script>
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key= API KEY HERE &callback=initMap">
+        </script>
+    </body>
+</html>
