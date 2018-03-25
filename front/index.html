@@ -2,6 +2,9 @@
 <html>
     <head>
         <script src="/init.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta charset="UTF-8">
+        <title>TbaneKart</title>
         <style>
             html, body {
                 margin: 0;
@@ -40,11 +43,78 @@
                 margin-top: 2px;
                 margin-bottom: 0px;
             }
+
+            .credits-frame {
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                margin-left: -120px;
+                width: 240px;
+                text-align: center;
+
+                background-color: rgba(255, 255, 255, 0.5);
+                font-weight: bolder;
+
+                z-index: 900;
+            }
+
+            .close-button {
+                position: absolute;
+                bottom: 70%;
+                left: 95%;
+            }
+
+            .clickable {
+                text-decoration: underline;
+                font-style: italic;
+            }
+
+            .about-frame {
+                position: absolute;
+                top: 50px;
+
+                width: 700px;
+                background-color: white;
+
+                padding: 20px;
+            }
+
+            .about-close {
+                display: block;
+                width: 100%;
+            }
         </style>
     </head>
     <body>
         <div id="error" class="error-frame"></div>
         <div id="map" class="map-frame"></div>
+        <div id="about" class="about-frame" hidden>
+            <h2>Om Tbanekartet</h2>
+            <p>
+                Tbanekartet viser en omtrentlig posisjon for alle tbanetog i rute, basert på tidsestimatene fra sanntidssystemet.
+            </p>
+            <p>
+                Det fungerer ved at kartet igjen og igjen sjekker avgangstider fra sanntidssystemet, lagrer disse, og beregner en posisjon mellom to stasjoner basert på hvor lenge det er siden det forlot forrige stasjon, og hvor lenge det er til det skal være på neste stasjon.
+            </p>
+
+            <h3>Viktig</h3>
+            <p>
+                Tbanekartet er ikke nøyaktig. Det viser ikke alle tog, kun tog i rute. Bruk aldri kartet til å se etter tog før du krysser tbanesporene. Å ferdes i sporene utenfor merket område er livsfarlig og ulovlig.
+            </p>
+
+            <h3>Linker</h3>
+            <ul>
+                <li><a href="https://github.com/HumaneWolf/tbanekart" target="_blank" rel="nofollow noopener noreferrer">Github</a></li>
+            </ul>
+
+            <button class="about-close" onclick="document.getElementById('about').hidden = true;">Close</button>
+        </div>
+        <div id="credits" class="credits-frame">
+            <p>
+                Jeg er open source, og ikke tilknyttet Ruter - <span class="clickable" onclick="document.getElementById('about').hidden = false;">Om meg</span>
+            </p>
+            <span class="close-button" onclick="document.getElementById('credits').hidden = true;">x</span>
+        </div>
         <script>
             var map;
             var trains = [];
