@@ -12,3 +12,7 @@ setup(
         'flask-cors==3.0.3'
     ]
 )
+
+print('')
+print('Remember to copy/rename init.example.js to init.js, and fill out the information in the variables.')
+print('')

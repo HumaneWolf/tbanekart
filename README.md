@@ -13,3 +13,11 @@ Kartet viser ikke nøyaktige posisjoner, og viser bare tog i rute. Kartet kan ik
 ## Teknisk
 
 Kartet er kodet i Python 3.6, og benytter seg av Flask frameworket og Google Maps sin API.
+
+## Oppsett
+
+* Installer Python 3.6.
+* Klon eller last ned en kopi av repoet..
+* Kjør `server/setup.py install` for å installere dependencies..
+* Kopier eller bytt navn på `front/init.example.js` til `front/init.js` og fyll ut informasjonen i filen.
+* Sett opp en webserver til å vise `front/` og kjør `server/main.py`.
