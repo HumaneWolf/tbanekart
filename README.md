@@ -1,10 +1,10 @@
-# TbaneKart (ALPHA)
+# TbaneKart (WIP/Proof Of Concept)
 
 Et kart som viser hvor togene i tbanen i Oslo er, beregnet basert på sanntidssystemet.
 
 Fungerer ved at den sjekker neste avganger for alle stasjoner, og bruker de forventede avgangstidene til å beregne hva som er neste stasjon. Når systemet vet neste og forrige stasjon kan det beregne hvor langt det har kommet mellom disse stasjonene basert på tiden.
 
-Kartet er et work in progress, og er i en alpha/pre-alpha state. Tog kan og vil vises på feil sted til tider, eller ta "rare" ruter mellom stasjoner.
+Kartet er et Work in Progress Proof of Concept, og vil ha bugs.
 
 ## Viktig
 
@@ -12,4 +12,4 @@ Kartet viser ikke nøyaktige posisjoner, og viser bare tog i rute. Kartet kan ik
 
 ## Teknisk
 
-Kartet er kodet i Python 3.6, og benytter seg av Flask frameworket, og Google Maps sin API.
+Kartet er kodet i Python 3.6, og benytter seg av Flask frameworket og Google Maps sin API.
