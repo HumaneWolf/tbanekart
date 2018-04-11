@@ -111,7 +111,7 @@
         </div>
         <div id="credits" class="credits-frame">
             <p>
-                Jeg er open source, og ikke tilknyttet Ruter - <span class="clickable" onclick="document.getElementById('about').hidden = false;">Om meg</span>
+                Kartet er open source, og ikke tilknyttet Ruter - <span class="clickable" onclick="document.getElementById('about').hidden = false;">Om kartet</span>
             </p>
             <span class="close-button" onclick="document.getElementById('credits').hidden = true;">x</span>
         </div>
@@ -134,6 +134,7 @@
                                                 '<strong><span class="line-no">' + train.line + '</span> ' + train.destination + '</strong>' +
                                                 '<p><strong>Tog:</strong> ' + train.id + '</p>' +
                                                 '<p><strong>Neste stasjon:</strong> ' + train.nextStop.name + '</p>' +
+                                                '<p><strong>Forrige stasjon:</strong> ' + train.prevStop.name + '</p>' +
                                                 '<p><strong>Sist oppdatert: </strong> ' + new Date(train.lastUpdate).toLocaleString() + ' UTC</p>' +
                                                 '</div>');
                                     } else {
@@ -151,6 +152,7 @@
                                                 '<strong><span class="line-no">' + train.line + '</span> ' + train.destination + '</strong>' +
                                                 '<p><strong>Tog ID:</strong> ' + train.id + '</p>' +
                                                 '<p><strong>Neste stasjon:</strong> ' + train.nextStop.name + '</p>' +
+                                                '<p><strong>Forrige stasjon:</strong> ' + train.prevStop.name + '</p>' +
                                                 '<p><strong>Sist oppdatert: </strong> ' + new Date(train.lastUpdate).toLocaleString() + ' UTC</p>' +
                                                 '</div>'
                                         });

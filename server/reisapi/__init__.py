@@ -10,6 +10,8 @@ stations = {}
 trains = {}
 trainLock = RLock()
 
+trainsCache = []
+
 
 def run():
     # Load station list
@@ -50,6 +52,33 @@ def run():
                 train.update_position()
         for train in deletion_queue:
             del trains[train]
+
+        trainsCache.clear()
+        for train in trains.values():
+            if train.nextStation is not None:
+                next_stop_name = train.nextStation.name
+            else:
+                next_stop_name = 'Loading..'
+            if train.prevStation is not None:
+                prev_stop_name = train.prevStation.name
+            else:
+                prev_stop_name = 'Loading..'
+            trainsCache.append({
+                'id': train.train,
+                'line': train.line,
+                'destination': train.destination,
+                'nextStop': {
+                    'name': next_stop_name,
+                    'time': train.nextStationDep.isoformat()
+                },
+                'prevStop': {
+                    'name': prev_stop_name,
+                    'time': train.prevStationDep.isoformat()
+                },
+                'lat': train.lat,
+                'lon': train.lon,
+                'lastUpdate': train.lastUpdate.isoformat()
+            })
         trainLock.release()
 
         # Delay next loop.

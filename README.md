@@ -19,5 +19,5 @@ Kartet er kodet i Python 3.6, og benytter seg av Flask frameworket og Google Map
 * Installer Python 3.6.
 * Klon eller last ned en kopi av repoet..
 * Kjør `server/setup.py install` for å installere dependencies..
-* Kopier eller bytt navn på `front/init.example.js` til `front/init.js` og fyll ut informasjonen i filen.
-* Sett opp en webserver til å vise `front/` og kjør `server/main.py`.
+* Kopier eller bytt navn på `client/init.example.js` til `client/init.js` og fyll ut informasjonen i filen.
+* Sett opp en webserver til å vise `client/` og kjør `server/main.py`.
