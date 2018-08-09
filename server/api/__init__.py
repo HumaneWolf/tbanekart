@@ -1,4 +1,3 @@
-from threading import Thread
 from gevent.wsgi import WSGIServer
 
 from api import Api
@@ -10,12 +9,11 @@ from api import Errors
 from api import routes
 
 
-def run(port):
+def run():
+    # Init web
+    host = Config['API']['host']
+    port = int(Config['API']['port'])
+
     Logger.info('Api running on port ' + str(port) + '.')
-    server = WSGIServer(('0.0.0.0', port), Api.api, log=None)
+    server = WSGIServer((host, port), Api.api, log=None)
     server.serve_forever()
-
-
-class ApiThread(Thread):
-    def run(self):
-        run(int(Config['API']['port']))

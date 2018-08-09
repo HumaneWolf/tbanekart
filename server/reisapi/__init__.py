@@ -1,9 +1,11 @@
 from datetime import datetime, timedelta
 from gevent import Greenlet, sleep
+import json
 import requests
-from threading import Thread, RLock
+from threading import RLock
 
 from lib.Config import Config
+from lib.Redis import Redis
 from reisapi.Station import Station
 
 stations = {}
@@ -14,17 +16,35 @@ trainsCache = []
 
 
 def run():
+    # Init Redis
+    redis = Redis(Config['REDIS']['host'], Config['REDIS']['port'])
+
     # Load station list
     routes = Config['REISAPI']['metroLines'].split(',')
     for route in routes:
         r = requests.get(Config['REISAPI']['base'] + 'Line/GetStopsByLineId/' + route)
         if r.status_code != 200:
             return []
-        json = r.json()
-        for station in json:
+        stat = r.json()
+        for station in stat:
             if station['ID'] in stations:
                 continue
             stations[station['ID']] = Station(station)
+
+    response_cache = {
+        'error': False,
+        'response': []
+    }
+
+    for station in stations.values():
+        response_cache['response'].append({
+            'id': station.station,
+            'name': station.name,
+            'lat': station.lat,
+            'lon': station.lon
+        })
+
+    redis.set('tbane:stations', json.dumps(response_cache))
 
     # Update loop
     while True:
@@ -81,10 +101,12 @@ def run():
             })
         trainLock.release()
 
+        response_cache = {
+            'error': False,
+            'response': trainsCache
+        }
+
+        redis.set('tbane:trains', json.dumps(response_cache))
+
         # Delay next loop.
         sleep(float(Config['REISAPI']['sleepTime']))
-
-
-class ReisThread(Thread):
-    def run(self):
-        run()

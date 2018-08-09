@@ -1,12 +1,15 @@
-from api import ApiThread
-from reisapi import ReisThread
+from multiprocessing import Process
 
-# Start API
-api = ApiThread(name='api')
-api.start()
+import api
+import reisapi
 
-reis = ReisThread(name='reis')
-reis.start()
+if __name__ == '__main__':
+    # Start API
+    api = Process(target=api.run)
+    api.start()
 
-api.join()
-reis.join()
+    reis = Process(target=reisapi.run)
+    reis.start()
+
+    api.join()
+    reis.join()
