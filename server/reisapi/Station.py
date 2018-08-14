@@ -28,7 +28,7 @@ class Station:
         # Logger.info('Request: ' + str(self.station))
         try:
             r = requests.get(Config['REISAPI']['base'] + 'StopVisit/GetDepartures/' + str(self.station))
-        except (MaxRetryError, TimeoutError) as e:
+        except (MaxRetryError, TimeoutError, ConnectionError) as e:
             Logger.warn("Ruter API returned exception: " + e)
             return []
         if r.status_code != 200:
